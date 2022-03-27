@@ -31,17 +31,15 @@ router.delete('/:id', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   const blog = await Blog.findByPk(req.params.id)
-  
-  if (blog && req.body.likes) {
-    blog.likes = req.body.likes;
+  if (!blog) {
+    throw { status: 404, message: "not found "}
+  }
+  const { likes } = req.body
+  if (!isNaN(likes)) {
+    blog.likes = likes;
     await blog.save();
   } else {
-    if (!blog) {
-      res.status(404).end()
-    }
-    if (!req.body.likes) {
-      res.status(400).end()
-    }
+    throw { status: 400, message: "likes has to be a number"}
   }
   res.status(204).end()
 })
