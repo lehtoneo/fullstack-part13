@@ -10,12 +10,12 @@ ReadingList.init({
     primaryKey: true,
     autoIncrement: true
   },
-  user_id: {
+  userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: { model: 'users', key: 'id' },
   },
-  blog_id: {
+  blogId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: { model: 'blogs', key: 'id' },
@@ -28,7 +28,7 @@ ReadingList.init({
   sequelize,
   underscored: true,
   timestamps: false,
-  modelName: 'reading_list'
+  modelName: 'reading_lists'
 })
 
 module.exports = ReadingList

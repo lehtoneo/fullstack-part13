@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const { User, Blog } = require('../models')
+const { User, Blog, ReadingList } = require('../models')
 
 router.get('/', async (req, res) => {
   const users = await User.findAll({
@@ -14,6 +14,28 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const user = await User.create(req.body)
+  res.json(user)
+})
+
+router.get('/:id', async (req, res) => {
+  const user = await User.findByPk(req.params.id, {
+    include:[{
+      model: Blog,
+      attributes: { exclude: ['userId']},
+    },
+    {
+      model: Blog,
+      as: 'readings',
+      attributes: { exclude: ['userId', 'reading_lists']},
+      through: {
+        attributes: []
+      },
+    }
+  ]
+  })
+  if (!user) {
+    throw { status: 404, message: "User not found" }
+  }
   res.json(user)
 })
 
