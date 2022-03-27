@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require('sequelize')
+const { Model, DataTypes, Op } = require('sequelize')
 
 const { sequelize } = require('../util/db')
 
@@ -22,7 +22,19 @@ User.init({
     type: DataTypes.STRING,
     allowNull: false
   },
+  disabled: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  }
 }, {
+  defaultScope: {
+    where: {[Op.or]: [{ disabled: false }, { disabled: null }]}
+  },
+  scopes: {
+    include_disabled: {
+      where: { }
+    }
+  },
   sequelize,
   timestamps: true,
   underscored: true,

@@ -6,6 +6,7 @@ const auth = async (req, _res, next) => {
   
   const user = await userFromToken(token)
 
+  req.token = token;
   req.currentUser = user;
 
   next()
