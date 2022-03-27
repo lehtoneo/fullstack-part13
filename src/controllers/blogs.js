@@ -1,14 +1,26 @@
 const router = require('express').Router()
-
+const { Op } = require('sequelize')
+const sequelize = require('sequelize')
 const verifyLoggedInUser = require('../middleware/verifyLoggedInUser')
 const { Blog, User } = require('../models')
 
 router.get('/', async (req, res) => {
+  let where = {}
+
+  if (req.query.search) {
+    where = {
+      [Op.or]: [
+        sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + req.query.search + '%'),
+        sequelize.where(sequelize.fn('LOWER', sequelize.col('author')), 'LIKE', '%' + req.query.search + '%')
+      ]
+    }
+  }
   const blogs = await Blog.findAll({
     include: {
       model: User,
     },
-    attributes: { exclude: ['userId'] }
+    attributes: { exclude: ['userId'] },
+    where
   })
   res.json(blogs)
 })
