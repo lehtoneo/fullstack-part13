@@ -1,7 +1,7 @@
 const errorHandler = (error, request, response, next) => {
   
-
-  if (error.name === "SequelizeValidationError") {
+  console.log(error)
+  if (error.name === "SequelizeValidationError" || error.name === "SequelizeUniqueConstraintError") {
     const { errors } = error
     const errorsFormatted = errors.map(e => e.message)
     return response.status(400).send({ error: { errors: errorsFormatted } })
