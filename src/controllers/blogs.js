@@ -33,6 +33,23 @@ router.delete('/:id', async (req, res) => {
   res.status(204).end()
 })
 
+router.put('/:id', async (req, res) => {
+  const blog = await Blog.findByPk(req.params.id)
+  
+  if (blog && req.body.likes) {
+    blog.likes = req.body.likes;
+    await blog.save();
+  } else {
+    if (!blog) {
+      res.status(404).end()
+    }
+    if (!req.body.likes) {
+      res.status(400).end()
+    }
+  }
+  res.status(204).end()
+})
+
 
 
 module.exports = router
