@@ -3,8 +3,7 @@ CREATE TABLE blogs (
     author text,
     title text NOT NULL,
     "url" text NOT NULL,
-    likes INTEGER DEFAULT 0,
-    date time
+    likes INTEGER DEFAULT 0
 );
 
 INSERT INTO blogs (author, title, url)
