@@ -2,7 +2,8 @@ require('dotenv').config()
 const { Model, DataTypes } = require('sequelize')
 
 const { sequelize } = require('../util/db')
-
+const currentYear = new Date().getFullYear()
+const yearErrorMsg = `Year must be between 1991 and ${currentYear}`
 class Blog extends Model {}
 Blog.init({
   id: {
@@ -25,6 +26,19 @@ Blog.init({
   likes: {
     type: DataTypes.INTEGER,
     defaultValue: 0
+  },
+  year: {
+    type: DataTypes.INTEGER,
+    validate: {
+      min: {
+        args: 1991,
+        msg: yearErrorMsg
+      },
+      max: {
+        args: currentYear,
+        msg: yearErrorMsg
+      },
+    },
   }
 }, {
   sequelize,
